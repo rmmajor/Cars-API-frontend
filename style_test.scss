@@ -1,3 +1,39 @@
+/* Mixins */
+@mixin button-styles($background-color, $hover-color) {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: $background-color;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+@mixin tab-button-styles($active-color) {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: bold;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease-in-out;
+
+  &.active,
+  &:hover {
+    border-bottom-color: $active-color;
+  }
+}
+
 /* Login and Register */
 body {
   font-family: Arial, sans-serif;
@@ -39,44 +75,11 @@ input[type="password"] {
 }
 
 input[type="submit"] {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #4CAF50;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: #3e8e41;
-  }
+  @include button-styles(#4CAF50, #3e8e41);
 }
 
 button {
-  display: inline-block;
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #4CAF50;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
-
-  &.ok {
-    background-color: #4CAF50;
-
-    &:hover {
-      background-color: #2e8634;
-    }
-  }
+  @include button-styles(#4CAF50, #2e8634);
 
   &.cancel {
     background-color: #dc3545;
@@ -87,7 +90,6 @@ button {
   }
 }
 
-/* header */
 /* Header styles */
 header {
   background-color: #4CAF50;
@@ -162,30 +164,19 @@ header {
   }
 
   .tab-button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    border-bottom: 2px solid transparent;
-    font-weight: bold;
-    cursor: pointer;
-    transition: border-bottom-color 0.2s ease-in-out;
-
-    &.active,
-    &:hover {
-      border-bottom-color: #fff;
-    }
+    @include tab-button-styles(#fff);
   }
 }
 
-/*Profile styles*/
+/* Profile styles */
 .profile {
   max-width: 500px;
-  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
 
   h2 {
     font-size: 24px;
@@ -229,7 +220,7 @@ header {
   }
 }
 
-/* instances styles */
+/* Instance styles */
 .instance-details {
   background-color: #fff;
   padding: 20px;

@@ -1,3 +1,4 @@
+/* Mixins */
 /* Login and Register */
 body {
   font-family: Arial, sans-serif;
@@ -39,10 +40,9 @@ input[type=password] {
 }
 
 input[type=submit] {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
   border: none;
   border-radius: 5px;
   background-color: #4CAF50;
@@ -69,10 +69,7 @@ button {
   font-weight: bold;
   transition: background-color 0.2s ease-in-out;
 }
-button.ok {
-  background-color: #4CAF50;
-}
-button.ok:hover {
+button:hover {
   background-color: #2e8634;
 }
 button.cancel {
@@ -82,7 +79,6 @@ button.cancel:hover {
   background-color: #c82333;
 }
 
-/* header */
 /* Header styles */
 header {
   background-color: #4CAF50;
@@ -161,13 +157,15 @@ header .tab-button.active, header .tab-button:hover {
   border-bottom-color: #fff;
 }
 
-/*Profile styles*/
+/* Profile styles */
 .profile {
   max-width: 500px;
-  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
 }
 .profile h2 {
   font-size: 24px;
@@ -205,7 +203,7 @@ header .tab-button.active, header .tab-button:hover {
   background-color: #187bcd;
 }
 
-/* instances styles */
+/* Instance styles */
 .instance-details {
   background-color: #fff;
   padding: 20px;
