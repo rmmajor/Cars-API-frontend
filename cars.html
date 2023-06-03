@@ -29,24 +29,226 @@
       </div>
     </header>
 
+    <script>
+        function fetchBrands() {
+            const url = "http://127.0.0.1:8000/brands/";
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const brandFilter = document.getElementById("brand-filter");
+                    brandFilter.innerHTML = ""; // Clear previous options
+
+                    const allOption = document.createElement("option");
+                    allOption.value = "";
+                    allOption.textContent = "All";
+                    brandFilter.appendChild(allOption);
+
+                    data.forEach(brand => {
+                        const option = document.createElement("option");
+                        option.value = brand.brand_name;
+                        option.textContent = brand.brand_name;
+                        brandFilter.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    alert(`Error fetching brands: ${error}`);
+                });
+        }
+
+        function fetchModels() {
+            const url = "http://127.0.0.1:8000/models/";
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const modelFilter = document.getElementById("model-filter");
+                    modelFilter.innerHTML = ""; // Clear previous options
+
+                    const allOption = document.createElement("option");
+                    allOption.value = "";
+                    allOption.textContent = "All";
+                    modelFilter.appendChild(allOption);
+
+                    data.forEach(model => {
+                        const option = document.createElement("option");
+                        option.value = model.model_name;
+                        option.textContent = model.model_name;
+                        modelFilter.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    alert("Error fetching models");
+                });
+        }
+
+        function fetchCars() {
+            const url = "http://127.0.0.1:8000/cars/";
+            fetchAndGenerateCarInstances(url);
+        }
+
+        function fetchAndGenerateCarInstances(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const instancesContainer = document.getElementById("car-instances-container");
+                    instancesContainer.innerHTML = ""; // Clear previous instances
+
+                    data.forEach(car => {
+                        const carDetails = document.createElement("div");
+                        carDetails.classList.add("instance-details");
+
+                        // brand
+                        const brandParagraph = document.createElement("p");
+                        carDetails.appendChild(brandParagraph);
+
+                        fetch('http://127.0.0.1:8000/brands/' + car.brand + '/')
+                            .then(response => response.json())
+                            .then(data => {
+                                brandParagraph.textContent = "Brand: " + data.brand_name;
+                            })
+                            .catch(error => {
+                                alert(`Error: ${error}`);
+                            });
+
+                        // model
+                        const modelParagraph = document.createElement("p");
+                        carDetails.appendChild(modelParagraph);
+
+                        fetch('http://127.0.0.1:8000/models/' + car.model + '/')
+                            .then(response => response.json())
+                            .then(data => {
+                                modelParagraph.textContent = "Model: " + data.model_name;
+                            })
+                            .catch(error => {
+                                alert(`Error: ${error}`);
+                            });
+
+                        const priceParagraph = document.createElement("p");
+                        priceParagraph.textContent = "Price: " + car.price;
+                        carDetails.appendChild(priceParagraph);
+
+                        const mileageParagraph = document.createElement("p");
+                        mileageParagraph.textContent = "Mileage: " + car.mileage;
+                        carDetails.appendChild(mileageParagraph);
+
+                        const exteriorColorParagraph = document.createElement("p");
+                        exteriorColorParagraph.textContent = "Exterior Color: " + car.exterior_color;
+                        carDetails.appendChild(exteriorColorParagraph);
+
+                        const interiorColorParagraph = document.createElement("p");
+                        interiorColorParagraph.textContent = "Interior Color: " + car.interior_color;
+                        carDetails.appendChild(interiorColorParagraph);
+
+                        const fuelTypeParagraph = document.createElement("p");
+                        fuelTypeParagraph.textContent = "Fuel Type: " + car.fuel_type;
+                        carDetails.appendChild(fuelTypeParagraph);
+
+                        const transmissionParagraph = document.createElement("p");
+                        transmissionParagraph.textContent = "Transmission: " + car.transmission;
+                        carDetails.appendChild(transmissionParagraph);
+
+                        const engineParagraph = document.createElement("p");
+                        engineParagraph.textContent = "Engine: " + car.engine;
+                        carDetails.appendChild(engineParagraph);
+
+                        const onSaleParagraph = document.createElement("p");
+                        onSaleParagraph.textContent = "On Sale: " + (car.is_on_sale ? "Yes" : "No");
+                        carDetails.appendChild(onSaleParagraph);
+
+                        instancesContainer.appendChild(carDetails);
+                    });
+                })
+                .catch(error => {
+                    alert("Error fetching car instances");
+                });
+        }
+
+        function filterCars() {
+            const brandFilter = document.getElementById("brand-filter").value;
+            const modelFilter = document.getElementById("model-filter").value;
+            const priceFilter = document.getElementById("price-filter").value;
+            const mileageFilter = document.getElementById("mileage-filter").value;
+            const exteriorColorFilter = document.getElementById("exterior-color-filter").value;
+            const interiorColorFilter = document.getElementById("interior-color-filter").value;
+            const fuelTypeFilter = document.getElementById("fuel-type-filter").value;
+            const transmissionFilter = document.getElementById("transmission-filter").value;
+            const engineFilter = document.getElementById("engine-filter").value;
+            const isOnSaleFilter = document.getElementById("is-on-sale-filter").checked;
+
+            let url = "http://127.0.0.1:8000/cars/";
+
+            if (!isOnSaleFilter) {
+                url += "all/";
+            }
+            url += "?";
+
+            // add filters to url
+            if (brandFilter) {
+                url += "brand_name=" + encodeURIComponent(brandFilter) + "&";
+            }
+            if (modelFilter) {
+                url += "model_name=" + encodeURIComponent(modelFilter) + "&";
+            }
+
+            if (priceFilter) {
+                url += "price=" + encodeURIComponent(priceFilter) + "&";
+            }
+            if (mileageFilter) {
+                url += "mileage=" + encodeURIComponent(mileageFilter) + "&";
+            }
+            if (exteriorColorFilter) {
+                url += "exterior_color=" + encodeURIComponent(exteriorColorFilter) + "&";
+            }
+            if (interiorColorFilter) {
+                url += "interior_color=" + encodeURIComponent(interiorColorFilter) + "&";
+            }
+            if (fuelTypeFilter) {
+                url += "fuel_type=" + encodeURIComponent(fuelTypeFilter) + "&";
+            }
+            if (transmissionFilter) {
+                url += "transmission=" + encodeURIComponent(transmissionFilter) + "&";
+            }
+            if (engineFilter) {
+                url += "engine=" + encodeURIComponent(engineFilter) + "&";
+            }
+
+            // Remove the trailing '&' character
+            url = url.slice(0, -1);
+            console.log(url);
+            fetchAndGenerateCarInstances(url);
+        }
+
+        function resetFilters() {
+            document.getElementById("brand-filter").value = "";
+            document.getElementById("model-filter").value = "";
+            document.getElementById("price-filter").value = "";
+            document.getElementById("mileage-filter").value = "";
+            document.getElementById("exterior-color-filter").value = "";
+            document.getElementById("interior-color-filter").value = "";
+            document.getElementById("fuel-type-filter").value = "";
+            document.getElementById("transmission-filter").value = "";
+            document.getElementById("engine-filter").value = "";
+            document.getElementById("is-on-sale-filter").checked = true;
+
+            fetchBrands();
+            fetchModels();
+            fetchCars();
+        }
+
+        fetchBrands();
+        fetchModels();
+        fetchCars();
+    </script>
+
     <h1>Cars Filter</h1>
     <form>
         <label for="brand-filter">Brand:</label>
         <select id="brand-filter">
             <option value="">All</option>
-            <option value="1">Brand 1</option>
-            <option value="2">Brand 2</option>
-            <option value="3">Brand 3</option>
-            <!-- Add more brand options here -->
         </select><br>
 
         <label for="model-filter">Model:</label>
         <select id="model-filter">
             <option value="">All</option>
-            <option value="1">Model 1</option>
-            <option value="2">Model 2</option>
-            <option value="3">Model 3</option>
-            <!-- Add more model options here -->
         </select><br>
 
         <label for="price-filter">Price:</label>
@@ -69,47 +271,23 @@
             <option value="">All</option>
             <option value="Automatic">Automatic</option>
             <option value="Manual">Manual</option>
-            <option value="Semi-automatic">Semi-automatic</option>
-            <!-- Add more transmission options here -->
+            <option value="CVT">CVT</option>
         </select><br>
 
         <label for="engine-filter">Engine:</label>
         <input type="text" id="engine-filter" name="engine-filter" placeholder="Enter engine"><br>
 
         <label for="is-on-sale-filter">On Sale:</label>
-        <input type="checkbox" id="is-on-sale-filter" name="is-on-sale-filter"><br>
+        <input type="checkbox" id="is-on-sale-filter" name="is-on-sale-filter" checked><br>
 
         <div class="button-container">
-            <button type="button" class="cancel">Reset</button>
+            <button type="button" class="cancel" onclick="resetFilters()">Reset</button>
             <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
         </div>
     </form>
 
-    <div class="instance-details" id="car-details-1">
-        <p>Brand: Skoda</p>
-        <p>Model: Octavia</p>
-        <p>Price: 933223935</p>
-        <p>Mileage: 98324498</p>
-        <p>Exterior Color: black</p>
-        <p>Interior Color: white</p>
-        <p>Fuel Type: diesel</p>
-        <p>Transmission: Automatic</p>
-        <p>Engine: cool</p>
-        <p>On Sale: true</p>
-    </div>
-
-    <div class="instance-details" id="car-details-2">
-        <p>Brand: Skoda</p>
-        <p>Model: Octavia</p>
-        <p>Price: 933223935</p>
-        <p>Mileage: 98324498</p>
-        <p>Exterior Color: black</p>
-        <p>Interior Color: white</p>
-        <p>Fuel Type: diesel</p>
-        <p>Transmission: Automatic</p>
-        <p>Engine: cool</p>
-        <p>On Sale: true</p>
-    </div>
+    <h1>Cars Found</h1>
+    <div id="car-instances-container"></div>
 
 </body>
 </html>

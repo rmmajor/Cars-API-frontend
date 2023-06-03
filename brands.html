@@ -29,6 +29,77 @@
         </div>
     </header>
 
+    <script>
+        function filterBrands() {
+            const brandName = document.getElementById("brand-filter").value;
+            const headquartersCountry = document.getElementById("country-filter").value;
+
+            // Construct the URL with the filter parameters
+            let url = "http://127.0.0.1:8000/brands/?";
+
+            if (brandName) {
+                url += "brand_name=" + encodeURIComponent(brandName) + "&";
+            }
+
+            if (headquartersCountry) {
+                url += "headquarters_country=" + encodeURIComponent(headquartersCountry) + "&";
+            }
+
+            // Remove the trailing '&' character
+            url = url.slice(0, -1);
+
+            // Fetch data from the URL
+            fetchAndGenerateBrandInstances(url);
+        }
+
+        function fetchAndGenerateBrandInstances(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear previous instances
+                    const instancesContainer = document.getElementById("instances-container");
+                    instancesContainer.innerHTML = "";
+
+                    // Generate instances based on the fetched data
+                    data.forEach(instance => {
+                        const instanceDetails = document.createElement("div");
+                        instanceDetails.className = "instance-details";
+                        instanceDetails.id = "brand-details-" + instance.id;
+
+                        const brandNameParagraph = document.createElement("p");
+                        brandNameParagraph.innerText = "Brand Name: " + instance.brand_name;
+                        instanceDetails.appendChild(brandNameParagraph);
+
+                        const headquartersCountryParagraph = document.createElement("p");
+                        headquartersCountryParagraph.innerText = "Headquarters Country: " + instance.headquarters_country;
+                        instanceDetails.appendChild(headquartersCountryParagraph);
+
+                        instancesContainer.appendChild(instanceDetails);
+                    });
+                })
+                .catch(error => {
+                    alert("Error fetching data");
+                });
+        }
+
+        function resetBrandFilters() {
+            // Clear filter input fields
+            document.getElementById("brand-filter").value = "";
+            document.getElementById("country-filter").value = "";
+
+            // Reset URL to fetch all instances
+            const url = "http://127.0.0.1:8000/brands/";
+
+            // Fetch data from the reset URL
+            fetchAndGenerateBrandInstances(url);
+        }
+
+        window.onload = function () {
+            const initialUrl = "http://127.0.0.1:8000/brands/";
+            fetchAndGenerateBrandInstances(initialUrl);
+        };
+    </script>
+
     <h1>Filter by Brand</h1>
     <form>
         <label for="brand-filter">Brand Name:</label>
@@ -38,19 +109,12 @@
         <input type="text" id="country-filter" name="country-filter" placeholder="Enter country name"><br>
 
         <div class="button-container">
-            <button type="button" class="cancel">Reset</button>
-            <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
+            <button type="button" class="cancel" onclick="resetBrandFilters()">Reset</button>
+            <button type="button" class="ok" onclick="filterBrands()">Apply Filter</button>
         </div>
     </form>
 
-    <div class="instance-details" id="brand-details-1">
-        <p>Brand Name: BMW</p>
-        <p>Headquarters Country: Germany</p>
-    </div>
-    <div class="instance-details" id="brand-details-2">
-        <p>Brand Name: BMW</p>
-        <p>Headquarters Country: Germany</p>
-    </div>
+    <div id="instances-container"></div>
 
 </body>
 </html>
