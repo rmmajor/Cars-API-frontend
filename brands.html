@@ -29,20 +29,21 @@
         </div>
     </header>
 
-    <h1>Filter by Brand</h1>
-    <form>
-        <label for="brand-filter">Brand Name:</label>
-        <input type="text" id="brand-filter" name="brand-filter" placeholder="Enter brand name"><br>
+    <div class="brands-filter-form">
+        <h1>Filter by Brand</h1>
+        <form>
+            <label for="brand-filter">Brand Name:</label>
+            <input type="text" id="brand-filter" name="brand-filter" placeholder="Enter brand name"><br>
 
-        <label for="country-filter">Headquarters Country:</label>
-        <input type="text" id="country-filter" name="country-filter" placeholder="Enter country name"><br>
+            <label for="country-filter">Headquarters Country:</label>
+            <input type="text" id="country-filter" name="country-filter" placeholder="Enter country name"><br>
 
-        <div class="button-container">
-            <button type="button" class="cancel">Reset</button>
-            <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
-        </div>
-    </form>
-
+            <div class="button-container">
+                <button type="button" class="cancel">Reset</button>
+                <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
+            </div>
+        </form>
+    </div>
     <div class="instance-details" id="brand-details-1">
         <p>Brand Name: BMW</p>
         <p>Headquarters Country: Germany</p>
