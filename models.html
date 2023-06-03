@@ -6,56 +6,131 @@
     <link rel="stylesheet" href="style_test.css">
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <a href="#" class="header-logo" onclick="location.href='cars.html'">
-                CarAPI
-            </a>
-            <div class="header-right">
-                <a href="user_profile.html" class="profile-link">John Doe</a>
-                <button class="logout-button" onclick="location.href='register_or_login.html'">
-                    Log out
-                </button>
-                <button class="menu-toggle-button">&#9776;</button>
-            </div>
+<header>
+    <div class="header-top">
+        <a href="#" class="header-logo" onclick="location.href='cars.html'">
+            CarAPI
+        </a>
+        <div class="header-right">
+            <a href="user_profile.html" class="profile-link">John Doe</a>
+            <button class="logout-button" onclick="location.href='register_or_login.html'">
+                Log out
+            </button>
+            <button class="menu-toggle-button">&#9776;</button>
         </div>
-        <div class="header-bottom">
-            <span>Search by: </span>
-            <div class="tabs">
-                <button class="tab-button" onclick="location.href='brands.html'">Brand</button>
-                <button class="tab-button active" onclick="location.href='models.html'">Model</button>
-                <button class="tab-button" onclick="location.href='cars.html'">Car</button>
-            </div>
-        </div>
-    </header>
-
-    <h1>Filter by Model</h1>
-        <form>
-        <label for="model-filter">Model Name:</label>
-        <input type="text" id="model-filter" name="model-filter" placeholder="Enter model name"><br>
-
-        <label for="year-filter">Issue Year:</label>
-        <input type="number" id="year-filter" name="year-filter" placeholder="Enter issue year"><br>
-
-        <label for="body-filter">Body Style:</label>
-        <input type="text" id="body-filter" name="body-filter" placeholder="Enter body style"><br>
-
-        <div class="button-container">
-            <button type="button" class="cancel">Reset</button>
-            <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
-        </div>
-    </form>
-
-    <div class="instance-details" id="model-details-1">
-        <p>Model Name: Octavia</p>
-        <p>Issue Year: 2017</p>
-        <p>Body Style: Sedan</p>
     </div>
-    <div class="instance-details" id="model-details-2">
-        <p>Model Name: Octavia</p>
-        <p>Issue Year: 2017</p>
-        <p>Body Style: Sedan</p>
+    <div class="header-bottom">
+        <span>Search by: </span>
+        <div class="tabs">
+            <button class="tab-button" onclick="location.href='brands.html'">Brand</button>
+            <button class="tab-button active" onclick="location.href='models.html'">Model</button>
+            <button class="tab-button" onclick="location.href='cars.html'">Car</button>
+        </div>
     </div>
+</header>
+
+<script>
+    function filterCars() {
+        const modelName = document.getElementById("model-filter").value;
+        const issueYear = document.getElementById("year-filter").value;
+        const bodyStyle = document.getElementById("body-filter").value;
+
+        // Construct the URL with the filter parameters
+        let url = "http://127.0.0.1:8000/models/?";
+
+        if (modelName) {
+            url += "model_name=" + encodeURIComponent(modelName) + "&";
+        }
+
+        if (issueYear) {
+            url += "issue_year=" + encodeURIComponent(issueYear) + "&";
+        }
+
+        if (bodyStyle) {
+            url += "body_style=" + encodeURIComponent(bodyStyle) + "&";
+        }
+
+        // Remove the trailing '&' character
+        url = url.slice(0, -1);
+
+        // Fetch data from the URL
+        fetchAndGenerateInstances(url);
+    }
+
+    function fetchAndGenerateInstances(url) {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Clear previous instances
+                const instancesContainer = document.getElementById("instances-container");
+                instancesContainer.innerHTML = "";
+
+                // Generate instances based on the fetched data
+                data.forEach(instance => {
+                    const instanceDetails = document.createElement("div");
+                    instanceDetails.className = "instance-details";
+                    instanceDetails.id = "model-details-" + instance.id;
+
+                    const modelNameParagraph = document.createElement("p");
+                    modelNameParagraph.innerText = "Model Name: " + instance.model_name;
+                    instanceDetails.appendChild(modelNameParagraph);
+
+                    const issueYearParagraph = document.createElement("p");
+                    issueYearParagraph.innerText = "Issue Year: " + instance.issue_year;
+                    instanceDetails.appendChild(issueYearParagraph);
+
+                    const bodyStyleParagraph = document.createElement("p");
+                    bodyStyleParagraph.innerText = "Body Style: " + instance.body_style;
+                    instanceDetails.appendChild(bodyStyleParagraph);
+
+                    instancesContainer.appendChild(instanceDetails);
+                });
+            })
+            .catch(error => {
+                // console.error("Error fetching data:", error);
+                alert("Error fetching data");
+            });
+    }
+
+    function resetFilters() {
+        // Clear filter input fields
+        document.getElementById("model-filter").value = "";
+        document.getElementById("year-filter").value = "";
+        document.getElementById("body-filter").value = "";
+
+        // Reset URL to fetch all instances
+        const url = "http://127.0.0.1:8000/models/";
+
+        // Fetch data from the reset URL
+        fetchAndGenerateInstances(url);
+    }
+
+    window.onload = function () {
+        const initialUrl = "http://127.0.0.1:8000/models/"; // Initial URL with no filters
+        fetchAndGenerateInstances(initialUrl);
+    };
+
+</script>
+
+<h1>Filter by Model</h1>
+<form>
+    <label for="model-filter">Model Name:</label>
+    <input type="text" id="model-filter" name="model-filter" placeholder="Enter model name"><br>
+
+    <label for="year-filter">Issue Year:</label>
+    <input type="number" id="year-filter" name="year-filter" placeholder="Enter issue year"><br>
+
+    <label for="body-filter">Body Style:</label>
+    <input type="text" id="body-filter" name="body-filter" placeholder="Enter body style"><br>
+
+    <div class="button-container">
+        <button type="button" class="cancel" onclick="resetFilters()">Reset</button>
+        <button type="button" class="ok" onclick="filterCars()">Apply Filter</button>
+    </div>
+</form>
+
+<h1>Models Found</h1>
+<div id="instances-container"></div>
 
 </body>
 </html>
