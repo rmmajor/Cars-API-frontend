@@ -1,12 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import UserProfile from './UserProfile';
+import BrandTab from './BrandTab';
+import ModelTab from './ModelTab';
+import CarTab from './CarTab';
 
 const Header = () => {
-    const handleProfileClick = () => {
-        // Logic for navigating to UserProfile component
-        // For example, use React Router or update the state to display the UserProfile component
-    };
 
     return (
         <header>
@@ -15,9 +15,9 @@ const Header = () => {
                     CarAPI
                 </a>
                 <div className="header-right">
-                    <a href="#" className="profile-link" onClick={handleProfileClick}>
+                    <Link to="/profile" className="profile-link">
                         John Doe
-                    </a>
+                    </Link>
                     <button className="logout-button" onClick={() => (window.location.href = 'register_or_login.html')}>
                         Log out
                     </button>
@@ -27,15 +27,15 @@ const Header = () => {
             <div className="header-bottom">
                 <span>Search by: </span>
                 <div className="tabs">
-                    <button className="tab-button active" onClick={() => (window.location.href = 'brands.html')}>
-                        Brand
-                    </button>
-                    <button className="tab-button" onClick={() => (window.location.href = 'models.html')}>
-                        Model
-                    </button>
-                    <button className="tab-button" onClick={() => (window.location.href = 'cars.html')}>
-                        Car
-                    </button>
+                        <Link to="/brands" className="tab-button">
+                            Brand
+                        </Link>
+                        <Link to="/models" className="tab-button">
+                            Model
+                        </Link>
+                        <Link to="/cars" className="tab-button">
+                            Car
+                        </Link>
                 </div>
             </div>
         </header>

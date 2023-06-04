@@ -113,8 +113,6 @@ const CarTab = () => {
         filterCars();
     };
 
-    console.log("Car Instances:", carInstances)
-
     return (
         <div>
             <h1>Cars Found</h1>

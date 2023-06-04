@@ -1,5 +1,8 @@
 import React from 'react';
-import './index.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import './index.css'; // styles for the whole app
+
 import Header from './components/Header';
 import SignOptions from './components/SignOptions';
 import LoginForm from './components/LoginForm';
@@ -14,16 +17,18 @@ import CarTab from "./components/CarTab";
 function App() {
   return (
     <div className="App">
-        <Header/>
-        <CarTab/>
-
-        {/*<div>*/}
-        {/*    <UserProfile*/}
-        {/*        username='JohnDoe'*/}
-        {/*        password='********'*/}
-        {/*        email='johndoe@example.com'*/}
-        {/*    />*/}
-        {/*</div>*/}
+        <Router>
+            <Header />
+            <Routes>
+                <Route path="/brands" element={<BrandTab />} />
+                <Route path="/models" element={<ModelTab />} />
+                <Route path="/cars" element={<CarTab />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegistrationForm />} />
+                <Route path="/profile" element={<UserProfile />} />
+                {/* Add more routes as needed */}
+            </Routes>
+        </Router>
     </div>
   );
 }
