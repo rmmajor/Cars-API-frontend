@@ -1,6 +1,13 @@
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 
 const RegistrationForm = () => {
+    const navigate = useNavigate();
+
+    const handleCancelClick = () => {
+        navigate('/');
+    };
+
     return (
         <div className="registration-form">
             <h1>Registration Form</h1>
@@ -18,7 +25,9 @@ const RegistrationForm = () => {
                 <input type="password" id="confirm_password" name="confirm_password" /><br />
 
                 <div className="button-container">
-                    <button type="button" onClick={() => window.location.href='register_or_login.html'} className="cancel">Cancel</button>
+                    <button type="button" className="cancel" onClick={handleCancelClick}>
+                        Cancel
+                    </button>
                     <button type="button" onClick={() => window.location.href='cars.html'} className="ok">Register</button>
                 </div>
             </form>

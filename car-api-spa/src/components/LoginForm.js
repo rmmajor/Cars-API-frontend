@@ -1,20 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const LoginForm = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleCancelClick = () => {
+        navigate('/');
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/user/login/', {
+                username,
+                password,
+            });
+            const { access, refresh } = response.data;
+
+            // Store the tokens in local storage or state
+            localStorage.setItem('accessToken', access);
+            localStorage.setItem('refreshToken', refresh);
+
+            // Clear the form inputs
+            setUsername('');
+            setPassword('');
+
+            navigate('/cars'); // Redirect to the main page
+        } catch (error) {
+            alert('Invalid username or password');
+        }
+    };
+
     return (
         <div className="login-form">
             <h1>Login Form</h1>
-            <form>
-                <label htmlFor="username">Username:</label>
-                <input type="text" id="username" name="username" /><br />
-
-                <label htmlFor="password">Password:</label>
-                <input type="password" id="password" name="password" /><br />
-
-                <button type="button" className="ok" onClick={() => window.location.href='cars.html'}>
-                    Log in
-                </button>
-                <button type="button" className="cancel" onClick="location.href='register_or_login.html'">
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type="submit">Login</button>
+                <button type="button" className="cancel" onClick={handleCancelClick}>
                     Cancel
                 </button>
             </form>

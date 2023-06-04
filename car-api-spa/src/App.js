@@ -7,8 +7,6 @@ import Header from './components/Header';
 import SignOptions from './components/SignOptions';
 import LoginForm from './components/LoginForm';
 import RegistrationForm from './components/RegistrationForm';
-import ModelsFilterForm from './components/ModelsFilterForm';
-import CarsFilterForm from './components/CarsFilterForm';
 import UserProfile from "./components/UserProfile";
 import BrandTab from "./components/BrandTab";
 import ModelTab from "./components/ModelTab";
@@ -26,7 +24,7 @@ function App() {
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/register" element={<RegistrationForm />} />
                 <Route path="/profile" element={<UserProfile />} />
-                {/* Add more routes as needed */}
+                <Route path="/" element={<SignOptions />} />
             </Routes>
         </Router>
     </div>
