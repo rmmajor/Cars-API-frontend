@@ -5,7 +5,9 @@ import BrandInstance from "./BrandInstance";
 const CarTab = () => {
     const [carInstances, setCarInstances] = useState([]);
     const [brandFilter, setBrandFilter] = useState("");
+    const [brandOptions, setBrandOptions] = useState([]);
     const [modelFilter, setModelFilter] = useState("");
+    const [modelOptions, setModelOptions] = useState([]);
     const [priceFilter, setPriceFilter] = useState("");
     const [mileageFilter, setMileageFilter] = useState("");
     const [exteriorColorFilter, setExteriorColorFilter] = useState("");
@@ -16,10 +18,34 @@ const CarTab = () => {
     const [isOnSaleFilter, setIsOnSaleFilter] = useState(true);
 
     useEffect(() => {
-        fetchCars();
+        fetchBrandOptions();
+        fetchModelOptions();
+        filterCars();
     }, []);
 
-    const fetchCars = () => {
+    const fetchBrandOptions = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/brands/");
+            const data = await response.json();
+            const options = Array.from(new Set(data.map((brand) => brand.brand_name)));
+            setBrandOptions(options);
+        } catch (error) {
+            console.log("Error fetching brand options:", error);
+        }
+    };
+
+    const fetchModelOptions = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/models/");
+            const data = await response.json();
+            const options = Array.from(new Set(data.map((model) => model.model_name)));
+            setModelOptions(options);
+        } catch (error) {
+            console.log("Error fetching model options:", error);
+        }
+    };
+
+    const filterCars = () => {
         let url = "http://127.0.0.1:8000/cars/";
         if (!isOnSaleFilter) {
             url += "all/";
@@ -84,8 +110,10 @@ const CarTab = () => {
         setEngineFilter("");
         setIsOnSaleFilter(true);
 
-        fetchCars();
+        filterCars();
     };
+
+    console.log("Car Instances:", carInstances)
 
     return (
         <div>
@@ -93,26 +121,38 @@ const CarTab = () => {
             <div className="cars-filter-form">
                 <form>
                     <label htmlFor="brand-filter">Brand Name:</label>
-                    <input
-                        type="text"
+                    <select
                         id="brand-filter"
                         name="brand-filter"
-                        placeholder="Enter brand name"
                         value={brandFilter}
                         onChange={(e) => setBrandFilter(e.target.value)}
-                    />
+                    >
+                        <option value="">All Brands</option>
+                        {brandOptions.map((brand) => (
+                            <option key={brand} value={brand}>
+                                {brand}
+                            </option>
+                        ))}
+                    </select>
+
                     <label htmlFor="model-filter">Model Name:</label>
-                    <input
-                        type="text"
+                    <select
                         id="model-filter"
                         name="model-filter"
-                        placeholder="Enter model name"
                         value={modelFilter}
                         onChange={(e) => setModelFilter(e.target.value)}
-                    />
+                    >
+                        <option value="">All Models</option>
+                        {modelOptions.map((model) => (
+                            <option key={model} value={model}>
+                                {model}
+                            </option>
+                        ))}
+                    </select>
+
                     <label htmlFor="price-filter">Price:</label>
                     <input
-                        type="text"
+                        type="number"
                         id="price-filter"
                         name="price-filter"
                         placeholder="Enter price"
@@ -121,7 +161,7 @@ const CarTab = () => {
                     />
                     <label htmlFor="mileage-filter">Mileage:</label>
                     <input
-                        type="text"
+                        type="number"
                         id="mileage-filter"
                         name="mileage-filter"
                         placeholder="Enter mileage"
@@ -155,15 +195,18 @@ const CarTab = () => {
                         value={fuelTypeFilter}
                         onChange={(e) => setFuelTypeFilter(e.target.value)}
                     />
-                    <label htmlFor={"transmission-filter"}>Transmission:</label>
-                    <input
-                        type="text"
+                    <label htmlFor="transmission-filter">Transmission:</label>
+                    <select
                         id="transmission-filter"
                         name="transmission-filter"
-                        placeholder="Enter transmission"
                         value={transmissionFilter}
                         onChange={(e) => setTransmissionFilter(e.target.value)}
-                    />
+                    >
+                        <option value="">All</option>
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual</option>
+                        <option value="Semi-automatic">Semi-automatic</option>
+                    </select>
                     <label htmlFor="engine-filter">Engine:</label>
                     <input
                         type="text"
@@ -183,15 +226,16 @@ const CarTab = () => {
                     />
                     <div className="button-container">
                         <button type="button" className="cancel" onClick={resetCarFilters}>Reset</button>
-                        {/*<button type="button" className="ok" onClick={}>Apply Filter</button>*/}
+                        <button type="button" className="ok" onClick={filterCars}>Apply Filter</button>
                     </div>
                 </form>
             </div>
-            {/*<div id="instances-container">*/}
-            {/*    {carInstances.map((instance) => (*/}
-            {/*        <CarInstance key={instance.id} instance={instance} />*/}
-            {/*    ))}*/}
-            {/*</div>*/}
+            <div id="instances-container">
+
+                {carInstances.map((instance) => (
+                    <CarInstance key={instance.id} instance={instance} />
+                ))}
+            </div>
         </div>
     );
 };
