@@ -24,7 +24,7 @@ const CarInstance = ({instance}) => {
 
                 // Update the instance object with the model name
                 const updatedInstance = { ...instance, model: modelDetails.model_name };
-                console.log(updatedInstance);
+                // console.log(updatedInstance);
             } catch (error) {
                 console.error("Error fetching model details:", error);
             }
