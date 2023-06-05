@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BrandInstance from './BrandInstance';
+import {useNavigate} from "react-router-dom";
 
 
 function BrandTab() {
@@ -7,7 +8,13 @@ function BrandTab() {
     const [headquartersCountry, setHeadquartersCountry] = useState('');
     const [brandInstances, setBrandInstances] = useState([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
+        // if (sessionStorage.getItem('accessToken') == null) {
+        //     console.log('No access token')
+        //     navigate('/login');
+        // }
         fetchAndGenerateBrandInstances('http://127.0.0.1:8000/brands/');
     }, []);
 

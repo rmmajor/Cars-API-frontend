@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 import UserProfile from './UserProfile';
 import BrandTab from './BrandTab';
@@ -7,6 +7,12 @@ import ModelTab from './ModelTab';
 import CarTab from './CarTab';
 
 const Header = () => {
+    const navigate = useNavigate();
+    const username = localStorage.getItem('username');
+
+    const handleLogoutClick = () => {
+        navigate('/logout');
+    };
 
     return (
         <header>
@@ -16,9 +22,9 @@ const Header = () => {
                 </a>
                 <div className="header-right">
                     <Link to="/profile" className="profile-link">
-                        John Doe
+                        {username ? username : 'Sign In'}
                     </Link>
-                    <button className="logout-button" onClick={() => (window.location.href = 'register_or_login.html')}>
+                    <button className="logout-button" onClick={handleLogoutClick}>
                         Log out
                     </button>
                     <button className="menu-toggle-button">&#9776;</button>

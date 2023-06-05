@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Link, Route, useNavigate} from 'react-router-dom';
 
 import RegistrationForm from './RegistrationForm';
@@ -6,6 +6,16 @@ import LoginForm from './LoginForm';
 
 const SignOptions = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if the user is already logged in
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            // User is logged in, redirect to "/cars"
+            navigate('/cars');
+        }
+    }, []);
+
     const handleRegisterClick = () => {
         navigate('/register');
     };

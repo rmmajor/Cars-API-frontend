@@ -8,7 +8,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const handleCancelClick = () => {
-        navigate('/');
+        navigate(-1);
     };
 
     const handleSubmit = async (e) => {
@@ -22,8 +22,12 @@ const LoginForm = () => {
             const { access, refresh } = response.data;
 
             // Store the tokens in local storage or state
+            // console.log('access', access);
             localStorage.setItem('accessToken', access);
             localStorage.setItem('refreshToken', refresh);
+            localStorage.setItem('username', username);
+
+            // console.log('access in storage', localStorage.getItem('accessToken'));
 
             // Clear the form inputs
             setUsername('');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ModelInstance from './ModelInstance';
+import {useNavigate} from "react-router-dom";
 
 function ModelTab() {
     const [modelName, setModelName] = useState('');
@@ -7,7 +8,13 @@ function ModelTab() {
     const [bodyStyle, setBodyStyle] = useState('');
     const [modelInstances, setModelInstances] = useState([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
+        // if (sessionStorage.getItem('accessToken') == null) {
+        //     navigate('/');
+        // }
+
         fetchAndGenerateModelInstances('http://127.0.0.1:8000/models/');
     }, []);
 

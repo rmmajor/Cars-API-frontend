@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CarInstance from "./CarInstance";
 import BrandInstance from "./BrandInstance";
+import {useNavigate} from "react-router-dom";
 
 const CarTab = () => {
     const [carInstances, setCarInstances] = useState([]);
@@ -17,7 +18,13 @@ const CarTab = () => {
     const [engineFilter, setEngineFilter] = useState("");
     const [isOnSaleFilter, setIsOnSaleFilter] = useState(true);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
+        if (localStorage.getItem('accessToken') == null) {
+            navigate('/');
+        }
+
         fetchBrandOptions();
         fetchModelOptions();
         filterCars();
