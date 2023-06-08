@@ -1,11 +1,6 @@
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
-import UserProfile from './UserProfile';
-import BrandTab from './BrandTab';
-import ModelTab from './ModelTab';
-import CarTab from './CarTab';
-
 const Header = () => {
     const navigate = useNavigate();
     const username = localStorage.getItem('username');
