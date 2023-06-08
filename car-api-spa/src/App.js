@@ -12,7 +12,6 @@ import BrandTab from "./components/BrandTab";
 import ModelTab from "./components/ModelTab";
 import CarTab from "./components/CarTab";
 import AreYouSureLogout from "./components/AreYouSureLogout";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {

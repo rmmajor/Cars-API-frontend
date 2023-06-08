@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -15,32 +14,40 @@ const LoginForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/user/login/', {
-                username,
-                password,
+            const response = await fetch('http://127.0.0.1:8000/user/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
             });
-            const { access, refresh } = response.data;
 
-            // Store the tokens in local storage or state
-            // console.log('access', access);
-            localStorage.setItem('accessToken', access);
-            localStorage.setItem('refreshToken', refresh);
-            localStorage.setItem('username', username);
+            if (response.ok) {
+                const { access, refresh } = await response.json();
 
-            // console.log('access in storage', localStorage.getItem('accessToken'));
+                // Store the tokens in local storage or state
+                localStorage.setItem('accessToken', access);
+                localStorage.setItem('refreshToken', refresh);
+                localStorage.setItem('username', username);
 
-            // Clear the form inputs
-            setUsername('');
-            setPassword('');
+                // Clear the form inputs
+                setUsername('');
+                setPassword('');
 
-            navigate('/cars'); // Redirect to the main page
+                navigate('/cars'); // Redirect to the main page
+            } else {
+                throw new Error('Invalid username or password');
+            }
         } catch (error) {
-            alert('Invalid username or password');
+            alert(error.message);
         }
     };
 
     return (
-        <div className="login-form">
+        <div className="login-form" data-testid="login-form">
             <h1>Login Form</h1>
             <form onSubmit={handleSubmit}>
                 <input

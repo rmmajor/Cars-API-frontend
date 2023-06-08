@@ -11,10 +11,10 @@ function BrandTab() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // if (sessionStorage.getItem('accessToken') == null) {
-        //     console.log('No access token')
-        //     navigate('/login');
-        // }
+        if (localStorage.getItem('accessToken') == null) {
+            navigate('/');
+        }
+
         fetchAndGenerateBrandInstances('http://127.0.0.1:8000/brands/');
     }, []);
 
