@@ -1,5 +1,3 @@
 # Cars-API-frontend
-coursesuch z weba
 
----
-## todo:
+Frontend for CarAPi project: https://github.com/rmmajor/Cars-API
