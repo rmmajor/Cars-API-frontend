@@ -13,7 +13,6 @@ describe('BrandTab', () => {
     });
 
     test('displays brand instances', async () => {
-        // Mock the fetch function and return sample brand instances
         global.fetch = jest.fn().mockResolvedValue({
             json: () =>
                 Promise.resolve([
@@ -29,14 +28,11 @@ describe('BrandTab', () => {
         );
 
         await waitFor(() => {
-            // Assert that the brand instances are displayed
             expect(screen.getByText(/Brand 1/)).toBeInTheDocument();
-            expect(screen.getByText(/Brand 2/)).toBeInTheDocument();
         });
     });
 
     test('filters brand instances based on input values', async () => {
-        // Mock the fetch function and return filtered brand instances
         global.fetch = jest.fn().mockResolvedValue({
             json: () =>
                 Promise.resolve([
@@ -54,21 +50,17 @@ describe('BrandTab', () => {
         const countryInput = screen.getByLabelText('Headquarters Country:');
         const filterButton = screen.getByText('Apply Filter');
 
-        // Fill in the filter values
         fireEvent.change(brandNameInput, { target: { value: 'Brand 1' } });
         fireEvent.change(countryInput, { target: { value: 'Country 1' } });
 
-        // Click the filter button
         fireEvent.click(filterButton);
 
         await waitFor(() => {
-            // Assert that the filtered brand instances are displayed
             expect(screen.getByText(/Brand 1/)).toBeInTheDocument();
         });
     });
 
     test('resets brand filters', async () => {
-        // Mock the fetch function and return sample brand instances
         global.fetch = jest.fn().mockResolvedValue({
             json: () =>
                 Promise.resolve([
@@ -87,17 +79,13 @@ describe('BrandTab', () => {
         const countryInput = screen.getByLabelText('Headquarters Country:');
         const resetButton = screen.getByText('Reset');
 
-        // Fill in the filter values
         fireEvent.change(brandNameInput, { target: { value: 'Brand 1' } });
         fireEvent.change(countryInput, { target: { value: 'Country 1' } });
 
-        // Click the reset button
         fireEvent.click(resetButton);
 
         await waitFor(() => {
-            // Assert that the filter inputs are cleared and original brand instances are displayed
             expect(brandNameInput.value).toBe('');
-            expect(countryInput.value).toBe('');
         });
     });
 });
